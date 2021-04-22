@@ -1,0 +1,8 @@
+
+.ipynb_checkpoints
+venv
+.DS_Store
+demo
+scrapy
+webApp_Heroku
+gensim_topic_modeling_sentences.ipynb

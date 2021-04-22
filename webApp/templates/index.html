@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Results</title>
+  <link rel="stylesheet" type="text/css" href="../static/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <h1>
+    <!-- Display the heading title-->
+    <strong>
+      <font color=#111B6E  size=8> {{ card }} </font>
+    </strong>
+    <br>
+    <font color=#2D33A2 size=5>
+      <p>
+        Total review sentences = {{ num_review }}
+      </p>
+    </font>
+  </h1>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+
+  google.charts.load('current', {packages: ['corechart']});
+    // Draw the bar chart for sentiment when Charts is loaded.
+  google.charts.setOnLoadCallback(drawSentimentChart);
+
+  // Draw the bar chart for the topics when Charts is loaded.
+  google.charts.setOnLoadCallback(drawTopicChart);
+
+      function drawTopicChart() {
+
+        // Define the chart to be drawn.
+        var data = google.visualization.arrayToDataTable([
+          {% for key,  value in topic.items() %}
+          {%  if value[0] is string %}
+          ['{{ key }}', '{{ value[0] }}', '{{ value[2] }}', '{{ value[1] }}'],
+          {% else %}
+          ['{{ key }}', {{ value[0] }}, {{ value[2] }},  {{ value[1] }}],
+          {%  endif %}
+          {%  endfor %}
+        ]);
+
+
+        var options = {
+          title: 'Customer Satisfaction Based On Themes',
+          fontSize: 20,
+          chartArea: {width: '60%'},
+          colors: ['#049639','#8B8378', 'red'],
+          isStacked: true,
+          hAxis: {
+            title: 'Number of review sentences',
+            minValue: 0,
+            textStyle: {
+              fontSize: 18,
+              color: '#071918'
+            },
+            titleTextStyle: {
+              bold: true,
+              fontSize: 18,
+              color: '#071918'
+            }
+          },
+          vAxis: {
+            title: 'Topics',
+            textStyle: {
+              fontSize: 18,
+              color: '#071918'
+            },
+            titleTextStyle: {
+              fontSize: 18,
+              bold: true,
+              color: '#071918'
+            }
+          }
+        };
+
+        // Instantiate and draw the chart.
+        var chart = new google.visualization.BarChart(document.getElementById('container'));
+        chart.draw(data, options);
+      }
+
+        function drawSentimentChart() {
+          var data = google.visualization.arrayToDataTable([
+            {% for key, value in overall_senti.items() %}
+            {%  if value[0] is string %}
+            ['{{ key }}', '{{ value[0] }}', '{{ value[2] }}', '{{ value[1] }}'],
+            {% else %}
+            ['{{ key }}', {{ value[0] }}, {{ value[2] }},  {{ value[1] }}],
+            {%  endif %}
+            {%  endfor %}
+              ]);
+
+          var options = {width: 600,  height: 100,
+            legend: { position: 'top' },
+            fontSize: 15,
+            chartArea: {width: '80%'},
+            isStacked: 'percent',
+            colors: ['#049639','#8B8378', 'red'],
+            hAxis:{
+                 baselineColor: '#fff',
+                 gridlineColor: '#fff',
+                 textPosition: 'none'},
+                 vAxis: {
+                   textStyle: {
+                     fontSize: 12,
+                     bold: true,
+                     color: '#071918'
+                   },
+                   titleTextStyle: {
+                     fontSize: 18,
+                     bold: true,
+                     color: '#071918'
+                   }
+                 }
+          };
+
+      // Instantiate and draw the chart.
+      var chart= new google.visualization.BarChart(document.getElementById('sentiment'));
+      chart.draw(data, options);
+      }
+
+  </script>
+</head>
+
+<body>
+  <!--Divs that will hold the charts-->
+<table class="columns">
+      <tr>
+        <td><div id="sentiment" style = "width: 50px; height: 500px; margin: 0 auto"></div></td>
+        <td><div id="container" style = "width: 1200px; height: 400px; margin: 0 auto"></div></td>
+      </tr>
+    </table>
+
+<!-- Display 2 positive and 2 negative sentences-->
+<div class="row" style = " margin: 0 auto">
+  <div class="column" style="background-color:white;">
+    <h3>
+      <font color=#049639>Positive Review Highlights </font>
+      </h2>
+      <ul style="list-style-type:disc;">
+        <li> <strong> {{sentence.split('varsep')[0]}}</strong> </li>
+        <li> <strong> {{sentence.split('varsep')[1]}} </strong></li>
+      </ul>
+  </div>
+
+  <div class="column" style="background-color:white;">
+    <h3>
+      <font color="red">Negative Review Highlights</font>
+      </h2>
+      <ul style="list-style-type:disc;">
+        <li> <strong> {{sentence.split('varsep')[3]}}</strong> </li>
+        <li> <strong> {{sentence.split('varsep')[5]}} </strong></li>
+      </ul>
+  </div>
+</div>
+</body>
+
+</html>
