@@ -15,7 +15,10 @@ df = df[(df.topics != 'Bill Disputes') & (df.topics != 'Fraud Issues')]
 
 
 def webapp_data(data, threshold=None):
-    """This function filters all the results in a dataframe to be used in a web app"""
+    """
+    This function filters all the results
+    in a dataframe to be used in a web app
+    """
     df = pd.DataFrame()  # Initialize dataframe
     cards = list(data.creditcards.unique())  # List of all credit cards
     for card in cards:

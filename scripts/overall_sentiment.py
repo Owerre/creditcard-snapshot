@@ -10,8 +10,9 @@ df.company = df.company.replace(change)
 
 
 def overall_sentiment_func(data, threshold=None):
-    """This function returns the total number of positive, negative, and neutral  sentiment
-     for each credit card
+    """
+    This function returns the total number of positive,
+    negative, and neutral  sentiment for each credit card
     """
     df = pd.DataFrame()  # Initialize dataframe
     cards = list(data.company.unique())  # List of all credit cards
@@ -35,9 +36,7 @@ def overall_sentiment_func(data, threshold=None):
         # join dictionary so that  task_dict appears first
         topic_dict = {**task_dict, **total_dict}
         df = df.append({'overall_sentiment': topic_dict}, ignore_index=True)
-
     return df
-
 
 #print(overall_sentiment_func(df, threshold=0).head())
 result = overall_sentiment_func(df, threshold=0)
